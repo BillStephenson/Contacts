@@ -1,0 +1,233 @@
+================================================================================
+================================================================================
+# Title:		Node.js Web App Framework Install Instructions
+# Hardware:		Raspberry Pi computer model B+
+# Date:			01/01/2015
+# Author:		Bill Stephenson
+# Copyright:	I tried to.
+================================================================================
+================================================================================
+# Notes:
+
+# Install a complete, modern, web application software development stack
+# on a Raspberry Pi that contains the following software:
+
+# Install Node.js
+# Install Express.js
+# Install Express Application Generator
+# Install React
+# Install CouchDB
+
+# These install instructions are for the Dec-24-2014 Raspbian disk image
+# http://www.raspberrypi.org/downloads/
+================================================================================
+# Update and Upgrade Raspbian
+================================================================================
+
+	$ sudo apt-get update
+
+	$ sudo apt-get upgrade
+
+================================================================================
+# Install Node.js :: Platform for Server Side JavaScript runtime
+# http://raspberryalphaomega.org.uk/2014/06/11/installing-and-using-node-js-on-raspberry-pi/
+================================================================================
+
+	$ sudo su -
+
+	$ cd /opt
+
+	$ wget http://nodejs.org/dist/v0.10.28/node-v0.10.28-linux-arm-pi.tar.gz
+
+	$ tar xvzf node-v0.10.28-linux-arm-pi.tar.gz
+
+	$ ln -s node-v0.10.28-linux-arm-pi node
+
+	$ chmod a+rw /opt/node/lib/node_modules
+
+	$ chmod a+rw /opt/node/bin
+
+	$ echo 'PATH=$PATH:/opt/node/bin' > /etc/profile.d/node.sh
+
+# Press Control-D to exit the root shell and return to your regular user.
+
+# Log out of the shell, then log back in. Or, reboot the Pi.
+
+================================================================================
+# Install Express.js :: Node.js Web Application Framework
+# http://expressjs.com/starter/installing.html
+================================================================================
+
+# First, in your /home/pi directory create a new directory to hold your
+# application, and make that your working directory.
+
+	$ cd
+
+	$ mkdir myapp
+
+	$ cd myapp
+
+# Create a package.json file in the directory of interest, if it does not exist
+# already, with the npm init command.
+
+	$ npm init
+
+# Install Express in the app directory and save it in the dependencies list:
+
+	$ npm install express --save
+
+# To install Express temporarily, and not add it to the dependencies list, omit
+# the --save option:
+
+	$ npm install express
+================================================================================
+# Install Express Application Generator and Set Up a Demo App
+# http://expressjs.com/starter/generator.html
+================================================================================
+
+# Use the application generator tool, express, to quickly create a application
+# skeleton.
+
+# Install it with the following command.
+
+	$ npm install express-generator -g
+
+	$ express myapp
+
+# Install dependencies:
+
+	$ cd myapp && npm install
+
+# Run the app:
+
+	$ DEBUG=myapp ./bin/www
+	
+# Test your server in your web browser with these urls
+
+	http://localhost:3000
+	http://127.0.0.1:3000
+
+# When you're all done all these urls should work in web browser connected to 
+# your local network too if you've configured DNS Host Mapping in your router:
+
+	http://YOUR_IP_ADDRESS:3000
+	http://YOUR_HOST_NAME:3000
+
+================================================================================
+# React :: A Javascript Library For Building User Interfaces
+# http://facebook.github.io/react/docs/getting-started.html
+================================================================================
+
+# Download the React Library here:
+
+# http://facebook.github.io/react/downloads/react-0.12.2.zip
+
+# Move it into your Express application directory at "/home/pi/myapp".
+
+# Unzip inside the react-0.12.2.zip file:
+
+	$ unzip react-0.12.2.zip
+
+================================================================================
+# CouchDB :: Database
+# http://jeeonthepi.blogspot.com/2014/08/installing-couchdb-1.html
+================================================================================
+
+# Add the following line to your /etc/apt/sources.list:
+
+	deb http://packages.erlang-solutions.com/debian wheezy contrib
+
+# Next, add the Erlang Solutions public key for apt-secure using following 
+# commands:
+
+	$ wget http://packages.erlang-solutions.com/debian/erlang_solutions.asc
+
+	$ sudo apt-key add erlang_solutions.asc
+
+# update repository cache
+
+	$ sudo apt-get update
+
+# Install Compilers
+
+	$ sudo apt-get install erlang-nox
+
+	$ sudo apt-get install erlang-dev
+
+# Spidermonkey JS engine as lib
+
+	$ sudo apt-get install libmozjs185-1.0
+
+# Development headers for spidermonkey lib
+
+	$ sudo apt-get install libmozjs185-dev
+
+# Dev files for libcurl (openSSL)
+
+	$ sudo apt-get install libcurl4-openssl-dev
+
+# Dev files for icu (Unicode and Locales)
+
+	$ sudo apt-get install libicu-dev
+
+####
+# Create couchDB account
+
+	$ sudo useradd -d /var/lib/couchdb couchdb
+
+	$ sudo mkdir -p /usr/local/{lib,etc}/couchdb /usr/local/var/{lib,log,run}/couchdb /var/lib/couchdb
+
+	$ sudo chown -R couchdb:couchdb /usr/local/{lib,etc}/couchdb /usr/local/var/{lib,log,run}/couchdb
+
+	$ sudo chmod -R g+rw /usr/local/{lib,etc}/couchdb /usr/local/var/{lib,log,run}/couchdb
+
+# Download source and unpack
+
+	$ wget http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/couchdb/source/1.6.0/apache-couchdb-1.6.0.tar.gz
+
+	$ tar xzf apache-couchdb-*.tar.gz
+
+# Change into the couchDB directory
+
+	$ cd apache-couchdb-1.6.0
+
+#Configure the build
+
+	$ ./configure --prefix=/usr/local --with-js-lib=/usr/lib --with-js-include=/usr/include/js --enable-init
+
+# running make and make install
+
+	$ make && sudo make install
+
+# Start couchDB
+
+	$ sudo ln -s /usr/local/etc/init.d/couchdb /etc/init.d/couchdb
+
+	$ sudo /etc/init.d/couchdb start
+
+	$ sudo update-rc.d couchdb defaults
+
+# see if its running...
+
+	$ curl http://127.0.0.1:5984/
+
+# Open local.ini, find the [httpd] section, uncomment the port
+# and bind_address and set the bind_address to the IP of 
+# your Pi to make couchDB accessible within your network
+
+	$ sudo nano /usr/local/etc/couchdb/local.ini
+
+# make couchdb user (created above) owner of local ini-file
+
+	$ sudo chown couchdb:couchdb /usr/local/etc/couchdb/local.ini
+
+# re-boot your Pi and open Futon in your web browser: 
+
+# 	YOUR_IP_ADDRESS:5984/_utils/
+
+#	example: http://192.168.0.131:5984/_utils/
+
+================================================================================
+# Get to Work!
+================================================================================
+
