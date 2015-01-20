@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>#{title}</title>
+	<script src="/javascripts/jquery-1.11.2.js" type="application/javascript">
+</script>
+
+<script type="application/javascript">
+<!--
+$.ajax({
+ 
+    // The URL for the request
+    url: "http://pi:5984/alice/_design/list_contacts/_view/list_contacts",
+  
+    // Whether this is a POST or GET request
+    type: "GET",
+ 
+    // The type of data we expect back
+    dataType : "jsonp",
+ 
+    // Code to run if the request succeeds;
+    // the response is passed to the function
+    success: function( data ) {
+    
+    	$( "<h2>" ).text( data.total_rows ).appendTo( "body" );     
+
+        var output="<ul>";
+        for (var i in data.rows) {
+        
+// 			var key = data.rows[i].key;
+// 			var name = data.rows[i].value;
+// 			output+="<li>" + data.rows[i].id+ ": " +key+ " : " + name+ "<\/li>";
+
+            output+="<li>" + data.rows[i].id+ ": " +data.rows[i].key+ " : " +data.rows[i].value+ "<\/li>";
+
+        }
+
+        output+="<\/ul>";
+        document.getElementById("placeholder").innerHTML=output;
+        i++;
+        console.log( "Status: " + i + " rows returned");
+
+    },
+ 
+    // Code to run if the request fails; the raw request and
+    // status codes are passed to the function
+    error: function( xhr, status, errorThrown ) {
+        alert( "Sorry, there was a problem!" );
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    },
+ 
+    // Code to run regardless of success or failure
+    complete: function( xhr, status ) {
+        alert( "The request is complete!" );
+    }
+});
+
+//-->
+</script>
+
+</head>
+<body>
+
+<div>Your Results: </div>
+
+<div id="placeholder">
+
+</div>
+
+</body>
+</html>
+

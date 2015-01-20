@@ -1,0 +1,31 @@
+extends layout
+
+block content
+	h1=title
+	
+	h3=msg
+
+	h2 Add new Contacts
+	
+	form(method="POST" , action="/update_contact")
+
+		input#title(type="hidden" , name="_id", value="#{_id}")
+
+		p Name:
+		input#title(type="text" , name="name", value="#{name}")
+
+		p Email:
+		input#email(type="text" , name="email", value="#{email}")
+
+
+		p Phone No:
+		input#body(type="text" , name="phone", value="#{phone}")
+
+		p Address:
+		input#address(type="text" , name="address", value="#{address}")
+
+		p City:
+		input#city(type="text" , name="city", value="#{city}")
+
+		p: button(type="submit") Update Contact
+

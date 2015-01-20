@@ -1,0 +1,58 @@
+﻿extends layout
+
+block content
+	h1=title
+	
+	h3=msg
+	
+	#thelist #{mylist}
+
+	h2 Add new Contacts
+	
+	form(method="POST" , action="/new_contact")
+
+		p Name:
+		input#title(type="text" , name="name")
+
+		p Email:
+		input#email(type="text" , name="email")
+
+
+		p Phone No:
+		input#body(type="text" , name="phone")
+
+		p Address:
+		input#address(type="text" , name="address")
+
+		p City:
+		input#city(type="text" , name="city")
+
+		p: button(type="submit") Add New Contact
+
+
+
+	h2 Add new Database this is for example.In real life app databse is already set up
+	form(method="POST" , action="/createdb")
+		p Database name:
+		input#title(type="text" , name="dbname")
+		p: button(type="submit") Add New Database
+
+	h2 enter phone number to delete contact
+	form(method="POST" , action="/delete_contact")
+		p Name:
+		input#title(type="text" , name="name")
+		p: button(type="submit") Delete contacts
+
+	h2 View Specific contacts
+	form(method="POST" , action="/view_contact")
+		p Name:
+		input#title(type="text" , name="name")
+		p: button(type="submit") View Contact
+
+	h2 Edit Specific contacts
+	form(method="POST" , action="/edit_contact")
+		p Name:
+		input#title(type="text" , name="name")
+		p: button(type="submit") Edit Contact
+
+	
