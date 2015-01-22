@@ -7,6 +7,7 @@ var appName = "iblocDB";
 var alldoc = "ALL DOCS: ";
 
 
+/* GET HOME PAGE view. */
 router.route('/')
     // show the form (GET http://localhost:8080/login)
 	.get(function(req, res) {
@@ -35,8 +36,9 @@ router.route('/')
 // 		//res.send("<h1>RESULT:</h1>" +alldoc);
 // 	});
 
-///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
+/* GET List view. */
 router.get('/list', function(req, res) {
 
 // use a key to narrow down the list..
@@ -61,11 +63,9 @@ router.get('/list', function(req, res) {
 // json url: http://pi:5984/alice/_design/list_all/_view/list_all
 // json url: http://pi:5984/alice/_design/list_contacts/_view/list_contacts
 
-////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-
-
-/* Get New DB view. */
+/* POST New DB view. */
 router.route('/createdb')
 
 	.post(function(req, res){
@@ -81,8 +81,9 @@ router.route('/createdb')
 		});
 	});
 
+////////////////////////////////////////////////////////////////////////////////
 
-/* GET New Contact view. */
+/* POST New Contact view. */
 
 router.route('/new_contact')
 	.post(function(req, res){
@@ -113,13 +114,15 @@ router.route('/new_contact')
 		});
 	});
 
+////////////////////////////////////////////////////////////////////////////////
 
-/* GET View Contact Info view. */
+/* POST View Contact Info view. */
+// json url: http://pi:5984/alice/_design/list_all/_view/list_all
 
 router.route('/view_contact')
 	.post(function(req, res){
 		var alldoc="Here's you're record: <br/><br/>";
-		db.get(req.body.name, { revs_info: true }, function(err, body) {
+		db.get(req.body.id, { revs_info: true }, function(err, body) {
 			if (!err)
 				console.log(body);
 			if(body){
@@ -132,9 +135,9 @@ router.route('/view_contact')
 		});
 	});
 
+////////////////////////////////////////////////////////////////////////////////
 
-/* GET Edit Contact view. */
-
+/* POST Edit Contact view. */
 router.route('/edit_contact')
 	.post(function(req, res){
 		var msg;
@@ -161,9 +164,41 @@ router.route('/edit_contact')
 	});
 
 
-/* GET Update Contact view. */
+////////////////////////////////////////////////////////////////////////////////
 
+/* GET Edit Contact view. */
+//URL Example: http://pi:3000/edit_contact2?name=cd6b2cba42e32d50b8618bf0be000e1e
+router.route('/edit_contact2')
+	.get(function(req, res){
+		var msg;
+		var _id = req.query.name;
+		console.log("Query: ", _id);
+		
+		db.get(_id, { revs_info: true }, function(err, body) {
+			if (!err)
+				console.log("Query: ", req.query);
+			if(body){
+				msg="Editing: "+_id;
+			}else{
+				msg="No Record exist with that key";
+			}			
+			res.render('update', 
+			{ msg: msg, 
+			  _id: _id,
+			  name:body.name, 
+			  email:body.email,
+			  phone:body.phone,
+			  address:body.address,
+			  city:body.city
+			});
 
+		});
+	
+	});
+
+////////////////////////////////////////////////////////////////////////////////
+
+/* POST Update Contact view. */
 router.route('/update_contact')
 	.post(function(req, res){
 		var _id=req.body._id;
@@ -200,9 +235,9 @@ router.route('/update_contact')
 		});
 	});
 
+////////////////////////////////////////////////////////////////////////////////
 
-/* GET Delete Contact view. */
-
+/* POST Delete Contact view. */
 router.route('/delete_contact')
 
 	.post(function(req, res){
@@ -221,6 +256,17 @@ router.route('/delete_contact')
 	});
 
 
+////////////////////////////////////////////////////////////////////////////////
+
+/* GET Contacts view. */
+
+var html_dir = '/';
+router.get('/contact', function(req, res) {
+    res.sendfile(html_dir + 'contacts.html');
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
 /* GET Bill view. */
 
 router.get('/Bill', function(req, res) {
@@ -236,5 +282,7 @@ router.get('/Bill', function(req, res) {
 		});
 		res.render('bill', { title: 'Bill\'s test' });
 	});
+
+////////////////////////////////////////////////////////////////////////////////
 
 module.exports = router;
