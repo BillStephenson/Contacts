@@ -4,7 +4,7 @@ var router = express.Router();
 var nano = require('nano')('http://192.168.0.131:5984');
 var db = nano.use('alice');
 var appName = "iblocDB";
-var alldoc = "ALL DOCS: ";
+var alldoc = "";
 
 
 /* GET HOME PAGE view. */
@@ -39,25 +39,30 @@ router.route('/')
 ////////////////////////////////////////////////////////////////////////////////
 
 /* GET List view. */
+
+//URL: pi:3000/list?key=bill2@ezinvoice.com
 router.get('/list', function(req, res) {
 
 // use a key to narrow down the list..
-	//var myKey='bill2@ezInvoice.com';
-	//db.view( 'list_all', 'list_all', { keys: [myKey] }, function(err, body ) {
+//	var myKey='bill2@ezInvoice.com';
+
+	var myKey = req.query.key;
+
+	db.view( 'list_all', 'list_all', { keys: [myKey] }, function(err, body ) {
 
 // Get the full list...
-	db.view( 'list_all', 'list_all', function(err, body ) {
+//	db.view( 'list_all', 'list_all', function(err, body ) {
 
 	  if (!err) {
 		body.rows.forEach(function(doc) {
-		  console.log(doc.id);
-		  alldoc+=doc.email+": ";
+		  console.log(doc.key);
+		  alldoc+=doc.value+ ": " + doc.key+ " ";
 		});
 	  }
+		console.log(alldoc);
+		res.render('index', { mylist: alldoc });
+		alldoc = "";
 	});
-	console.log(alldoc);
-	res.render('index', { mylist: alldoc });
-	alldoc = "ALL DOCS: ";
 });
 
 // json url: http://pi:5984/alice/_design/list_all/_view/list_all
