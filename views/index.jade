@@ -11,21 +11,39 @@ block content
 	
 	form(method="POST" , action="/new_contact")
 
-		p Name:
-		input#title(type="text" , name="name")
+		p First Name:
+		input#firstname(type="text" , name="firstname")
 
-		p Email:
-		input#email(type="text" , name="email")
-
-
-		p Phone No:
-		input#body(type="text" , name="phone")
+		p Last Name:
+		input#lastname(type="text" , name="lastname")
 
 		p Address:
 		input#address(type="text" , name="address")
 
+		p Address 2:
+		input#address(type="text" , name="address2")
+
 		p City:
 		input#city(type="text" , name="city")
+
+		p Postal Code:
+		input#postcode(type="text" , name="postcode")
+
+		p State/Province :
+		input#state(type="text" , name="state")
+
+		p Country:
+		input#country(type="text" , name="country")
+
+		p Email:
+		input#email(type="text" , name="email")
+
+		p Phone No:
+		input#body(type="text" , name="phone")
+
+		p Notes :
+		input#notes(type="textarea" , name="notes")
+
 
 		p: button(type="submit") Add New Contact
 
