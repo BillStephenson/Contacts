@@ -87,29 +87,46 @@ router.route('/createdb')
 
 router.route('/new_contact')
 	.post(function(req, res){
-		var name=req.body.name;
+		var firstname=req.body.firstname; 
+		var lastname=req.body.lastname; 
+		var address=req.body.address;
+		var address2=req.body.address2;
+		var city=req.body.city;
+		var state=req.body.state;
+		var postcode=req.body.postcode;
+		var country=req.body.country;
 		var email=req.body.email;
 		var phone=req.body.phone;
-		var address=req.body.address;
-		var city=req.body.city;
-		var contact="contact";
+		var notes=req.body.notes;
+		var type="contact";
+		var createDate=(Math.round(new Date().getTime()/1000));
 
 
 		/*The second parameter phone is the id we are explicitly specifying*/
-		db.insert({ name:name, 
-					email:email,
-					phone:phone, 
+		db.insert({ firstname:firstname, 
+					lastname:lastname, 
 					address:address,
-					city:city }, function(err, body, header) {
-			if (err) {
-				res.send("Error creating contacts or contacts already exists");
-				return;
-			}
+					address2:address2,
+					city:city,
+					state:state,
+					postcode:postcode,
+					country:country,
+					email:email,
+					phone:phone,
+					notes:notes,
+					type:type,
+					createDate:createDate
+					}, 
+					function(err, body, header) {
+						if (err) {
+							res.send("Error creating contacts or contacts already exists");
+							return;
+						}
 	
 //			res.send("Contacts was created sucessfully"); 
 
-			res.render('index', { msg: name + " has beed added to the database" });
-			console.log('processing index');
+			res.render('index', { msg: firstname + " "+lastname+ " has beed added to the database" });
+			console.log('processing new contact');
 
 		});
 	});
@@ -153,11 +170,17 @@ router.route('/edit_contact')
 			res.render('update', 
 			{ msg: msg, 
 			  _id: _id,
-			  name:body.name, 
+			  firstname:body.firstname, 
+			  lastname:body.lastname, 
+			  address:body.address,
+			  address2:body.address2,
+			  city:body.city,
+			  state:body.state,
+			  postcode:body.postcode,
+			  country:body.country,
 			  email:body.email,
 			  phone:body.phone,
-			  address:body.address,
-			  city:body.city
+			  notes:body.notes
 			});
 
 		});
@@ -178,18 +201,24 @@ router.route('/edit_contact2')
 			if (!err)
 				console.log("Query: ", req.query);
 			if(body){
-				msg="Editing: "+_id;
+				msg="Editing: "+body.firstname+ " " +body.lastname;
 			}else{
 				msg="No Record exist with that key";
 			}			
 			res.render('update', 
 			{ msg: msg, 
 			  _id: _id,
-			  name:body.name, 
+			  firstname:body.firstname, 
+			  lastname:body.lastname, 
+			  address:body.address,
+			  address2:body.address2,
+			  city:body.city,
+			  state:body.state,
+			  postcode:body.postcode,
+			  country:body.country,
 			  email:body.email,
 			  phone:body.phone,
-			  address:body.address,
-			  city:body.city
+			  notes:body.notes
 			});
 
 		});
@@ -203,15 +232,25 @@ router.route('/update_contact')
 	.post(function(req, res){
 		var _id=req.body._id;
 		
+		var createDate=(Math.round(new Date().getTime()/1000));
+
 		db.get(_id, function(err, val) {
 			if(err) {throw err;}
 			console.log('retrieved document', _id);
 
-			val.name=req.body.name;
+			val.firstname=req.body.firstname;
+			val.lastname=req.body.lastname;
+			val.address=req.body.address;
+			val.address2=req.body.address2;
+			val.city=req.body.city;
+			val.state=req.body.state;
+			val.postcode=req.body.postcode;
+			val.country=req.body.country;
 			val.email=req.body.email;
 			val.phone=req.body.phone;
-			val.address=req.body.address;
-			val.city=req.body.city;
+			val.notes=req.body.notes;
+			val.updated=createDate;
+			
 
 /* replace the old values with the new values */
 			db.insert(val, function(err) {
@@ -231,7 +270,7 @@ router.route('/update_contact')
 				});
 			});
 			console.log('processing index');
-			res.render('index', { msg: val.name + " has been updated" });
+			res.render('index', { msg: val.firstname + ", "+val.lastname+" has been updated" });
 		});
 	});
 
