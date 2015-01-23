@@ -103,25 +103,26 @@ router.route('/new_contact')
 
 
 		/*The second parameter phone is the id we are explicitly specifying*/
-		db.insert({ firstname:firstname, 
-					lastname:lastname, 
-					address:address,
-					address2:address2,
-					city:city,
-					state:state,
-					postcode:postcode,
-					country:country,
-					email:email,
-					phone:phone,
-					notes:notes,
-					type:type,
-					createDate:createDate
-					}, 
-					function(err, body, header) {
-						if (err) {
-							res.send("Error creating contacts or contacts already exists");
-							return;
-						}
+		db.insert({ 
+			firstname:firstname, 
+			lastname:lastname, 
+			address:address,
+			address2:address2,
+			city:city,
+			state:state,
+			postcode:postcode,
+			country:country,
+			email:email,
+			phone:phone,
+			notes:notes,
+			type:type,
+			createDate:createDate
+			}, 
+			function(err, body, header) {
+				if (err) {
+					res.send("Error creating contacts or contacts already exists");
+					return;
+				}
 	
 //			res.send("Contacts was created sucessfully"); 
 
