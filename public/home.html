@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>#{title}</title>
+	<script src="/javascripts/jquery-1.11.2.js" type="application/javascript">
+</script>
+
+<script type="application/javascript">
+<!--
+
+function loadList() {
+	$.ajax({
+	 
+		// The URL for the request
+		url: "http://pi:5984/alice/_design/list_contacts/_view/list_contacts",
+	  
+		// Whether this is a POST or GET request
+		type: "GET",
+	 
+		// The type of data we expect back
+		dataType : "jsonp",
+	 
+		// Code to run if the request succeeds;
+		// the response is passed to the function
+		success: function( data ) {
+		
+			$( "<h2>" ).text( data.total_rows ).appendTo( "body" );     
+	
+			var output="<ul>";
+			for (var i in data.rows) {
+			
+	 			var id = data.rows[i].id;
+	 			var key = data.rows[i].key;
+	 			var name = data.rows[i].value;
+
+				output+='<li><a href="#" onclick="loadContact(\''+id +'\');">View<\/a>: <a href="/edit_contact2?name='+id +'">Edit<\/a> ' +name+ "<\/li>";
+				console.log(output);
+	
+			}
+	
+			output+="<\/ul>";
+			document.getElementById("placeholder").innerHTML=output;
+			i++;
+			console.log( "Status: " + i + " rows returned");
+	
+		},
+	 
+		// Code to run if the request fails; the raw request and
+		// status codes are passed to the function
+		error: function( xhr, status, errorThrown ) {
+			alert( "Sorry, there was a problem!" );
+			console.log( "Error: " + errorThrown );
+			console.log( "Status: " + status );
+			console.dir( xhr );
+		},
+	 
+		// Code to run regardless of success or failure
+		complete: function( xhr, status ) {
+			console.log( "The request is complete!" );
+		}
+	});
+}
+
+function loadContact(thisFile) {
+
+	var myUrl = "http://pi:5984/alice/" +thisFile;
+	
+	$.ajax({
+	 
+		// The URL for the request
+		url: "http://pi:5984/alice/" +thisFile,
+	  
+		// Whether this is a POST or GET request
+		type: "GET",
+	 
+		// The type of data we expect back
+		dataType : "jsonp",
+	 
+		// Code to run if the request succeeds;
+		// the response is passed to the function
+		success: function( data ) {
+
+			output=  "<h3>" +data.firstname;
+			output+= " "    +data.lastname+		"<\/h3>";
+			output+= "<p>"  +data.address;
+			output+= "<br>" +data.city;
+			output+= "<br>" +data.phone;
+			output+= "<br>" +data.email+		"<\/p>";
+
+			document.getElementById("selectedContact").innerHTML=output;
+			
+			console.log( "Success: " +myUrl);
+	
+		},
+	 
+		// Code to run if the request fails; the raw request and
+		// status codes are passed to the function
+		error: function( xhr, status, errorThrown ) {
+			alert( "Sorry, there was a problem!" );
+			console.log( "Error: " + errorThrown );
+			console.log( "Status: " + status );
+			console.dir( xhr );
+		},
+	 
+		// Code to run regardless of success or failure
+		complete: function( xhr, status ) {
+			console.log( "The request is complete!" );
+		}
+	});
+
+}
+
+//-->
+</script>
+
+</head>
+<body onload="loadList()">
+
+<div>Your Results: </div>
+
+<div id="placeholder"></div>
+<div id="selectedContact"></div>
+
+</body>
+</html>
+
