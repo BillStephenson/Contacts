@@ -32,11 +32,9 @@ function loadList() {
 	 			var id = data.rows[i].id;
 	 			var key = data.rows[i].key;
 	 			var name = data.rows[i].value;
-	// 			output+="<li>" + data.rows[i].id+ ": " +key+ " : " + name+ "<\/li>";
-	
-	//			output+='<li><a href="#" onclick="loadContact(\'{%=' + data.rows[i].id+ "%}');\">Open File<\/a>: " +data.rows[i].key+ " : " +data.rows[i].value+ "<\/li>";
 
-				output+='<li><a href="#" onclick="loadContact(\''+id +'\');">Open File<\/a>: "' +key+ " : " +name+ "<\/li>";
+				output+='<li><a href="#" onclick="loadContact(\''+id +'\');">View<\/a>: <a href="/edit_contact2?name='+id +'">Edit<\/a> ' +name+ "<\/li>";
+				console.log(output);
 	
 			}
 	
@@ -58,13 +56,15 @@ function loadList() {
 	 
 		// Code to run regardless of success or failure
 		complete: function( xhr, status ) {
-			//alert( "The request is complete!" );
+			console.log( "The request is complete!" );
 		}
 	});
 }
 
 function loadContact(thisFile) {
 
+	var myUrl = "http://pi:5984/alice/" +thisFile;
+	
 	$.ajax({
 	 
 		// The URL for the request
@@ -80,11 +80,16 @@ function loadContact(thisFile) {
 		// the response is passed to the function
 		success: function( data ) {
 
-			output= data.name;
-		
-			output+="<\/ul>";
-			document.getElementById("placeholder").innerHTML=output;
-			//console.log( "Status: " +url);
+			output=  "<h3>" +data.firstname;
+			output+= " "    +data.lastname+		"<\/h3>";
+			output+= "<p>"  +data.address;
+			output+= "<br>" +data.city;
+			output+= "<br>" +data.phone;
+			output+= "<br>" +data.email+		"<\/p>";
+
+			document.getElementById("selectedContact").innerHTML=output;
+			
+			console.log( "Success: " +myUrl);
 	
 		},
 	 
@@ -99,7 +104,7 @@ function loadContact(thisFile) {
 	 
 		// Code to run regardless of success or failure
 		complete: function( xhr, status ) {
-			alert( "The request is complete!" );
+			console.log( "The request is complete!" );
 		}
 	});
 
@@ -113,9 +118,8 @@ function loadContact(thisFile) {
 
 <div>Your Results: </div>
 
-<div id="placeholder">
-
-</div>
+<div id="placeholder"></div>
+<div id="selectedContact"></div>
 
 </body>
 </html>
