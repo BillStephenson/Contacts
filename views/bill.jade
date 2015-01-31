@@ -1,49 +1,28 @@
-extends layout
+!= "<!DOCTYPE HTML>"
+!= "<html>"
 
-block content
-  h1= title
-  p Welcome to #{title}
-  p#red Your Phone number is #{phone}
+!= "<head>"
+!= "	<title>Contacts</title>"
+!= "	<link rel=stylesheet href=/stylesheets/home.css>"
+!= "	<script src=/javascripts/jquery-1.11.2.js type=application/javascript></script>"
+!= "	<script src=/javascripts/home.js type=application/javascript></script>"
+!= "</head>"
 
-<script type="application/javascript">
-<!--
-// Using the core $.ajax() method
-$.ajax({
- 
-    // The URL for the request
-    url: "http://pi:5984/alice/_design/list_contacts/_view/list_contacts",
- 
-    // The data to send (will be converted to a query string)
-    data: {
-        id: 123
-    },
- 
-    // Whether this is a POST or GET request
-    type: "GET",
- 
-    // The type of data we expect back
-    dataType : "json",
- 
-    // Code to run if the request succeeds;
-    // the response is passed to the function
-    success: function( json ) {
-        $( "<h1> Rows:" ).text( json.total_rows ).appendTo( "body" );
-        $( "<div class=\"content\">").html( json.html ).appendTo( "body" );
-    },
- 
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    error: function( xhr, status, errorThrown ) {
-        alert( "Sorry, there was a problem!" );
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    },
- 
-    // Code to run regardless of success or failure
-    complete: function( xhr, status ) {
-        alert( "The request is complete!" );
-    }
-});
-//-->
-</script>
+!= "<body onload=loadList()>"
+	
+!= "	<div id=header><h1>Contacts</h1><span id=msg></span></div>"
+
+!= "	<div id=contactList><h3>Contacts List</h3> "
+!= "		<div id=listings></div>"
+!= "	</div>"
+
+!= "	<div id=selectedContact><h3>Selected Contact</h3>"
+!= "		<div id=contact></div>"
+!= "	</div>"
+
+!= "	<div id=footer>spartasys contacts manager v0.0.1</div>"
+
+!= "</body>"
+
+!= "</html>"
+

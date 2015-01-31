@@ -4,6 +4,7 @@ var router = express.Router();
 var nano = require('nano')('http://192.168.0.131:5984');
 var db = nano.use('alice');
 var appName = "iblocDB";
+var html_dir = '/';
 var alldoc = "";
 
 
@@ -257,7 +258,6 @@ router.route('/update_contact')
 			val.notes=req.body.notes;
 			val.updated=createDate;
 			
-
 /* replace the old values with the new values */
 			db.insert(val, function(err) {
 				if (err) { console.log('insert failed') }
@@ -276,11 +276,78 @@ router.route('/update_contact')
 				});
 			});
 			console.log('processing index');
-			res.render('index', { msg: val.firstname + ", "+val.lastname+" has been updated" });
+			
+			//res.sendFile(html_dir + 'contacts.html');
+			//res.send("Document updated sucessfully");
+			
+			res.json(val);
+
+			//res.render('index', { msg: val.firstname + ", "+val.lastname+" has been updated" });
 		});
 	});
 
 ////////////////////////////////////////////////////////////////////////////////
+
+/* PUT Update Contact view. */
+router.route('/update_contact2')
+	.post(function(req, res){
+		var _id=req.body._id;
+		
+		var createDate=(Math.round(new Date().getTime()/1000));
+
+		db.get(_id, function(err, val) {
+			if(err) {throw err;}
+			console.log('retrieved document', _id);
+
+			val.firstname=req.body.firstname;
+			val.lastname=req.body.lastname;
+			val.address=req.body.address;
+			val.address2=req.body.address2;
+			val.city=req.body.city;
+			val.state=req.body.state;
+			val.postcode=req.body.postcode;
+			val.country=req.body.country;
+			val.email=req.body.email;
+			val.phone=req.body.phone;
+			val.notes=req.body.notes;
+			val.updated=createDate;
+			
+/* replace the old values with the new values */
+			db.insert(val, function(err) {
+				if (err) { console.log('insert failed') }
+					console.log('inserted document', val);
+					db.get(_id, function(err, val) {
+						console.log('doc = ', val);
+				});
+			});
+
+/* check the new values were set */
+			db.insert(val, function(err) {
+				if (err) { console.log('insert confirmed') }
+					console.log('inserted document', val);
+					db.get(_id, function(err, val) {
+						console.log('doc = ', val);
+				});
+			});
+			console.log('processing index');
+			
+			//res.sendFile(html_dir + 'contacts.html');
+			//res.send("Document updated sucessfully");
+			
+			//res.json(val);
+			
+			//res.sendFile(html_dir + 'home.html');
+			
+			//res.send("Document update sucessfully");
+
+			//res.render('index', { msg: val.firstname + ", "+val.lastname+" has been updated" });
+			
+			res.render('bill');
+		});
+	});
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 /* POST Delete Contact view. */
 router.route('/delete_contact')
@@ -305,9 +372,8 @@ router.route('/delete_contact')
 
 /* GET Contacts view. */
 
-var html_dir = '/';
 router.get('/contact', function(req, res) {
-    res.sendfile(html_dir + 'contacts.html');
+    res.sendFile(html_dir + 'contacts.html');
 });
 
 ////////////////////////////////////////////////////////////////////////////////
